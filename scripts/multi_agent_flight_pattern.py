@@ -398,7 +398,7 @@ class MultiAgentFlightController:
         print("Expanding spiral pattern complete")
 
 
-def run_demo(pattern="all", num_drones=5, ip=""):
+def run_demo(pattern="all", num_drones=5, ip="", interactive=True):
     """
     Run the multi-agent flight pattern demo.
 
@@ -406,7 +406,15 @@ def run_demo(pattern="all", num_drones=5, ip=""):
         pattern: Which pattern to run ("v", "line", "circle", "waypoints", "spiral", or "all")
         num_drones: Number of drones to use (2-5)
         ip: IP address of the AirSim server. Use "wsl" to auto-detect Windows host from WSL.
+        interactive: If True, wait for key presses between steps. Set False for non-interactive mode.
     """
+    def wait_or_continue(msg):
+        if interactive:
+            airsim.wait_key(msg)
+        else:
+            print(msg.replace("Press any key to", "Starting:"))
+            time.sleep(1)
+
     # Handle WSL auto-detection
     if ip.lower() == "wsl":
         ip = get_wsl_host_ip()
@@ -421,7 +429,7 @@ def run_demo(pattern="all", num_drones=5, ip=""):
 
     # Initialize
     controller.enable_control_all()
-    airsim.wait_key("Press any key to take off...")
+    wait_or_continue("Press any key to take off...")
     controller.takeoff_all()
 
     # Climb to altitude
@@ -432,7 +440,7 @@ def run_demo(pattern="all", num_drones=5, ip=""):
 
     try:
         if pattern in ["v", "all"]:
-            airsim.wait_key("\nPress any key to start V-formation flight...")
+            wait_or_continue("\nPress any key to start V-formation flight...")
             v_path = [
                 (0, 0),
                 (20, 0),
@@ -444,7 +452,7 @@ def run_demo(pattern="all", num_drones=5, ip=""):
             controller.fly_v_formation(v_path, spacing=5, altitude=-10, velocity=5)
 
         if pattern in ["line", "all"]:
-            airsim.wait_key("\nPress any key to start line formation flight...")
+            wait_or_continue("\nPress any key to start line formation flight...")
             controller.fly_line_formation(
                 start_pos=(0, -10),
                 end_pos=(30, -10),
@@ -454,7 +462,7 @@ def run_demo(pattern="all", num_drones=5, ip=""):
             )
 
         if pattern in ["circle", "all"]:
-            airsim.wait_key("\nPress any key to start circle formation flight...")
+            wait_or_continue("\nPress any key to start circle formation flight...")
             controller.fly_circle_formation(
                 center=(15, 0),
                 radius=12,
@@ -464,7 +472,7 @@ def run_demo(pattern="all", num_drones=5, ip=""):
             )
 
         if pattern in ["waypoints", "all"]:
-            airsim.wait_key("\nPress any key to start synchronized waypoint flight...")
+            wait_or_continue("\nPress any key to start synchronized waypoint flight...")
             waypoints = [
                 (0, 0),
                 (10, 10),
@@ -475,7 +483,7 @@ def run_demo(pattern="all", num_drones=5, ip=""):
             controller.fly_synchronized_waypoints(waypoints, altitude=-10, velocity=5)
 
         if pattern in ["spiral", "all"]:
-            airsim.wait_key("\nPress any key to start expanding spiral flight...")
+            wait_or_continue("\nPress any key to start expanding spiral flight...")
             controller.fly_expanding_spiral(
                 center=(15, 0),
                 start_radius=5,
@@ -488,7 +496,7 @@ def run_demo(pattern="all", num_drones=5, ip=""):
         print("\nInterrupted by user")
 
     # Land and cleanup
-    airsim.wait_key("\nPress any key to land all drones...")
+    wait_or_continue("\nPress any key to land all drones...")
     controller.land_all()
     controller.disable_control_all()
 
@@ -519,6 +527,11 @@ if __name__ == "__main__":
         default="",
         help="IP address of AirSim server. Use 'wsl' to auto-detect Windows host from WSL."
     )
+    parser.add_argument(
+        "--no-prompts",
+        action="store_true",
+        help="Run in non-interactive mode without waiting for key presses."
+    )
 
     args = parser.parse_args()
-    run_demo(pattern=args.pattern, num_drones=args.drones, ip=args.ip)
+    run_demo(pattern=args.pattern, num_drones=args.drones, ip=args.ip, interactive=not args.no_prompts)

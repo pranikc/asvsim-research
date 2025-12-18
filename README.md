@@ -34,8 +34,10 @@ pip install -e /path/to/ASVSim/PythonClient
 
 ### 2. Configure ASVSIM settings
 
-Copy a config from `configs/` to your AirSim settings location:
+Copy the config from `configs/multi_drone.json` to your AirSim settings location:
 - Windows: `C:\Users\<username>\Documents\AirSim\settings.json`
+
+**Important:** The config includes `"LocalHostIp": "0.0.0.0"` which is required for WSL connectivity.
 
 ### 3. Run experiments
 
@@ -43,10 +45,48 @@ Copy a config from `configs/` to your AirSim settings location:
 # Activate environment
 conda activate asvsim
 
-# Run multi-agent flight pattern demo
+# Run multi-agent flight pattern demo (non-interactive mode for WSL)
 cd scripts
+python multi_agent_flight_pattern.py --pattern circle --ip wsl --no-prompts
+```
+
+## Multi-Agent Flight Patterns
+
+The `multi_agent_flight_pattern.py` script supports several coordinated flight patterns:
+
+| Pattern | Description |
+|---------|-------------|
+| `v` | V-formation flight following waypoints |
+| `line` | Line formation moving together |
+| `circle` | Circular orbit around a center point |
+| `waypoints` | Synchronized convergence on waypoints |
+| `spiral` | Expanding spiral from center outward |
+| `all` | Run all patterns sequentially |
+
+### Usage
+
+```bash
+# Run specific pattern with 5 drones
+python multi_agent_flight_pattern.py --pattern circle --ip wsl --no-prompts
+
+# Run with fewer drones
+python multi_agent_flight_pattern.py --pattern v --drones 3 --ip wsl --no-prompts
+
+# Run all patterns
+python multi_agent_flight_pattern.py --pattern all --ip wsl --no-prompts
+
+# Interactive mode (waits for key presses between steps)
 python multi_agent_flight_pattern.py --pattern circle --ip wsl
 ```
+
+### Command Line Options
+
+| Option | Description |
+|--------|-------------|
+| `--pattern` | Flight pattern: `v`, `line`, `circle`, `waypoints`, `spiral`, `all` |
+| `--drones` | Number of drones: 2-5 (default: 5) |
+| `--ip` | Simulator IP. Use `wsl` to auto-detect Windows host from WSL |
+| `--no-prompts` | Non-interactive mode, no key press waits |
 
 ## Repository Structure
 
@@ -64,6 +104,21 @@ asvsim-research/
 └── examples/
     └── ...                  # Example notebooks and scripts
 ```
+
+## Key Findings
+
+### WSL2 to Windows Connectivity
+
+When running Python from WSL2 while the simulator runs on Windows:
+
+1. **Set `LocalHostIp` to `0.0.0.0`** in settings.json (allows external connections)
+2. **Use `--ip wsl`** flag to auto-detect Windows host IP
+3. **Add firewall rule** if connection is blocked:
+   ```powershell
+   New-NetFirewallRule -DisplayName "AirSim" -Direction Inbound -Port 41451 -Protocol TCP -Action Allow
+   ```
+
+See [docs/FINDINGS.md](docs/FINDINGS.md) for more details.
 
 ## Documentation
 

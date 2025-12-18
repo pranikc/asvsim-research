@@ -4,6 +4,24 @@ Known issues, limitations, and their workarounds when working with ASVSIM.
 
 ---
 
+## Running from WSL
+
+### Non-Interactive Mode Required
+
+**Issue:** When running scripts from WSL, `airsim.wait_key()` fails with `termios.error: (25, 'Inappropriate ioctl for device')` because WSL terminals don't support the terminal control operations.
+
+**Error:**
+```
+termios.error: (25, 'Inappropriate ioctl for device')
+```
+
+**Workaround:** Use `--no-prompts` flag to run in non-interactive mode:
+```bash
+python multi_agent_flight_pattern.py --pattern circle --ip wsl --no-prompts
+```
+
+---
+
 ## Environment Setup
 
 ### WSL2 Cannot Connect to Windows Simulator

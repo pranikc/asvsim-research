@@ -108,19 +108,24 @@ python multi_agent_flight_pattern.py --pattern circle --ip wsl
 ### 3. Available Flight Patterns
 
 ```bash
-# All patterns
-python multi_agent_flight_pattern.py --ip wsl
+# All patterns (non-interactive mode for WSL)
+python multi_agent_flight_pattern.py --ip wsl --no-prompts
 
 # Specific patterns
-python multi_agent_flight_pattern.py --pattern v --ip wsl
-python multi_agent_flight_pattern.py --pattern line --ip wsl
-python multi_agent_flight_pattern.py --pattern circle --ip wsl
-python multi_agent_flight_pattern.py --pattern waypoints --ip wsl
-python multi_agent_flight_pattern.py --pattern spiral --ip wsl
+python multi_agent_flight_pattern.py --pattern v --ip wsl --no-prompts
+python multi_agent_flight_pattern.py --pattern line --ip wsl --no-prompts
+python multi_agent_flight_pattern.py --pattern circle --ip wsl --no-prompts
+python multi_agent_flight_pattern.py --pattern waypoints --ip wsl --no-prompts
+python multi_agent_flight_pattern.py --pattern spiral --ip wsl --no-prompts
 
 # Fewer drones
-python multi_agent_flight_pattern.py --pattern circle --drones 3 --ip wsl
+python multi_agent_flight_pattern.py --pattern circle --drones 3 --ip wsl --no-prompts
+
+# Interactive mode (if running from Windows terminal directly)
+python multi_agent_flight_pattern.py --pattern circle --ip wsl
 ```
+
+**Note:** Use `--no-prompts` when running from WSL to avoid terminal control errors.
 
 ---
 

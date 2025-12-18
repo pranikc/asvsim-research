@@ -43,6 +43,17 @@ Documentation of important discoveries and learnings while working with ASVSIM.
 
 **Key Insight:** WSL2 and Windows share a virtual network bridge. Windows services must bind to `0.0.0.0` to be accessible from WSL.
 
+### Windows Firewall Configuration
+
+**Date:** 2024-12
+
+**Problem:** Even with `LocalHostIp: "0.0.0.0"`, connections from WSL may be blocked by Windows Firewall.
+
+**Solution:** Add an inbound firewall rule (run PowerShell as Administrator):
+```powershell
+New-NetFirewallRule -DisplayName "AirSim" -Direction Inbound -Port 41451 -Protocol TCP -Action Allow
+```
+
 ---
 
 ## Multi-Agent Control
