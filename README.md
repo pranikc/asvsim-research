@@ -120,11 +120,30 @@ When running Python from WSL2 while the simulator runs on Windows:
 
 See [docs/FINDINGS.md](docs/FINDINGS.md) for more details.
 
+## Pursuit-Evasion with PPO
+
+Run trained PPO policies from [AMS-DRL-Pursuit-Evasion](https://github.com/SkyrunAI/AMS-DRL-Pursuit-Evasion) in ASVSim:
+
+```bash
+# Use the 3-drone config
+cp configs/pursuit_evasion.json ~/Documents/AirSim/settings.json
+
+# Run pursuit-evasion demo
+python scripts/pursuit_evasion_ppo.py --ip wsl --episodes 5
+```
+
+**Scenario:**
+- **Runner (Drone1)**: PPO-controlled evader, tries to reach target
+- **Chasers (Drone2, Drone3)**: Heuristic pursuers at 70% speed
+
+See [docs/PPO_INTEGRATION.md](docs/PPO_INTEGRATION.md) for details.
+
 ## Documentation
 
 - [Key Findings](docs/FINDINGS.md) - Important discoveries and learnings
 - [Caveats & Workarounds](docs/CAVEATS.md) - Known issues and solutions
 - [Setup Guide](docs/SETUP.md) - Detailed environment setup
+- [PPO Integration](docs/PPO_INTEGRATION.md) - Pursuit-evasion with trained policies
 
 ## Related Resources
 

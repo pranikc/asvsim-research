@@ -1,0 +1,24 @@
+{
+    "SeeDocsAt": "https://cosys-lab.github.io/settings/",
+    "SettingsVersion": 1.2,
+    "SimMode": "Multirotor",
+    "LocalHostIp": "0.0.0.0",
+    "ClockSpeed": 1,
+    "Vehicles": {
+        "Drone1": {
+            "VehicleType": "SimpleFlight",
+            "X": 5, "Y": 5, "Z": -2,
+            "Yaw": 0
+        },
+        "Drone2": {
+            "VehicleType": "SimpleFlight",
+            "X": 15, "Y": 5, "Z": -2,
+            "Yaw": 0
+        },
+        "Drone3": {
+            "VehicleType": "SimpleFlight",
+            "X": 5, "Y": 15, "Z": -2,
+            "Yaw": 0
+        }
+    }
+}
